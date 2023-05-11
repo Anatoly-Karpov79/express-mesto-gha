@@ -20,7 +20,8 @@ module.exports.getAllUsers = (req, res) => {
 module.exports.getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => {res.send({ data: user });
+    .then((user) => {
+      res.send({ data: user });
     })
     .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
 };
