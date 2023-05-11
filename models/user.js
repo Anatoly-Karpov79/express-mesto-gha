@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
     type: String, // тип — String
     required: true, // оно должно быть у каждого пользователя, так что имя — обязательное поле
   },
+}, {
+  versionKey: false, // You should be aware of the outcome after set to false
 });
 
 module.exports = mongoose.model('user', userSchema);

@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     'airbnb',
+    'plugin:json/recommended',
   ],
   overrides: [
   ],
@@ -15,6 +16,7 @@ module.exports = {
   },
   plugins: [
     'react',
+
   ],
   rules: {
   },
