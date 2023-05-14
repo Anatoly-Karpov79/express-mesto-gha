@@ -1,5 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const Card = require('../models/card');
+const BadRequestError = require('../errors/badrequesterror');
+const NotFoundError = require('../errors/notfounderror');
 
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
@@ -23,16 +25,34 @@ module.exports.deleteCardById = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
     .then((card) => {
+      if (!card) { throw new NotFoundError('Card not found'); }
+    })
+    .then(() => {
       res.send({ message: 'Карточка удалена' });
     })
-    .catch((err) => res.status(500).send({ message: 'Произошла ошибка' }));
+
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
+module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   req.params.cardId,
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
-);
+)
+  .then((card) => {
+    if (!card) {
+      throw new NotFoundError('Карточка не найдена');
+    }
+    res.send({ data: card });
+  })
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      next(new BadRequestError('Card ID is incorrect'));
+      return;
+    }
+    next(err);
+});
+
 
 module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   req.params.cardId,
