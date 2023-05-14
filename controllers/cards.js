@@ -8,7 +8,7 @@ module.exports.createCard = (req, res) => {
   Card.create({ name, link, owner })
     .then((cards) => res.send({ data: cards }))
     // если данные не записались, вернём ошибку
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.getAllCards = (req, res) => {
@@ -22,9 +22,10 @@ module.exports.getAllCards = (req, res) => {
 module.exports.deleteCardById = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
-    .then((card) => { res.send({ message: 'Карточка удалена' });
-})
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+    .then((card) => {
+      res.send({ message: 'Карточка удалена' });
+    })
+    .catch((err) => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(

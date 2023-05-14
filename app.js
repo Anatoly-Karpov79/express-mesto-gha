@@ -24,5 +24,5 @@ app.use(routerUsers);
 app.use(routerCards);
 
 app.listen(PORT, () => {
-  console.log('Ссылка на сервер');
+  console.log(`App listening on port ${PORT}`);
 });
