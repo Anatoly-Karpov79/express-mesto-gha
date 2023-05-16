@@ -25,7 +25,7 @@ module.exports.deleteCardById = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
     .then((card) => {
-      if (!card) { throw new NotFoundError('Card not found'); }
+      if (!card) { throw new NotFoundError('Карточка не найдена'); }
     })
     .then(() => {
       res.send({ message: 'Карточка удалена' });
@@ -47,15 +47,27 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      next(new BadRequestError('Card ID is incorrect'));
+      next(new BadRequestError('Некорректный Id'));
       return;
     }
     next(err);
-});
+  });
 
-
-module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
+module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   req.params.cardId,
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
-);
+)
+  .then((card) => {
+    if (!card) {
+      throw new NotFoundError('Карточка не найдена');
+    }
+    res.send({ data: card });
+  })
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      next(new BadRequestError('Некорректный Id'));
+      return;
+    }
+    next(err);
+  });

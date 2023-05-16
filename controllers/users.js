@@ -5,9 +5,9 @@ module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    .then(user => res.send({ data: user }))
+    .then((user) => res.send({ data: user }))
     // если данные не записались, вернём ошибку
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.getAllUsers = (req, res) => {
@@ -24,7 +24,7 @@ module.exports.getUserById = (req, res) => {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.updateUser = (req, res) => {
@@ -40,7 +40,7 @@ module.exports.updateUser = (req, res) => {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.updateUserAvatar = (req, res) => {
@@ -56,5 +56,5 @@ module.exports.updateUserAvatar = (req, res) => {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
