@@ -20,20 +20,17 @@ module.exports.getAllUsers = (req, res) => {
     .catch();
 };
 
-module.exports.getUserById = (req, res, next) => {
+module.exports.getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        res.status(404).send({ message: 'Неверный Id' });
       }
       res.status(200).send({ data: user });
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError('Невевный ID'));
-      }
-      next(err);
+    .catch(() => {
+      res.status(404).send({ message: 'jgznm Неверный Id' });
     });
 };
 

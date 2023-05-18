@@ -9,7 +9,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(bodyParser.json());
-
+app.use(errors());
 app.use((req, res, next) => {
   req.user = {
     _id: '645c9a30736a12ac74a2fc61', // вставьте сюда _id созданного в предыдущем пункте пользователя
@@ -23,6 +23,5 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 
 app.use(routerUsers);
 app.use(routerCards);
-app.use(errors());
 
 app.listen(PORT);
