@@ -7,14 +7,15 @@
     "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint"
-
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
+    "celebrate": "^15.0.1",
     "express": "^4.18.2",
+    "joi": "^17.9.2",
     "mongoose": "^7.1.0"
   },
   "devDependencies": {
@@ -28,5 +29,4 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "nodemon": "^2.0.22"
   }
-
 }
