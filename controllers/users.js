@@ -49,7 +49,6 @@ module.exports.updateUser = (req, res) => {
     },
   )
     .then((user) => {
-
       res.send({ data: user });
     })
     .catch(() => res.status(404).send({ message: 'Произошла ошибка' }));
