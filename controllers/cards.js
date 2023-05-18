@@ -31,7 +31,7 @@ module.exports.deleteCardById = (req, res) => {
       res.send({ message: 'Карточка удалена' });
     })
 
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
