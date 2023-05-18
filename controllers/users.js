@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const User = require('../models/user');
+const NotFoundError = require('../errors/notfounderror');
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
@@ -38,6 +39,9 @@ module.exports.updateUser = (req, res) => {
     },
   )
     .then((user) => {
+      if (!user) {
+        throw new NotFoundError('The requested user not found');
+      }
       res.send({ data: user });
     })
     .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
