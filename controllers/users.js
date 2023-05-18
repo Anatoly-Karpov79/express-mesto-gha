@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const User = require('../models/user');
 const NotFoundError = require('../errors/notfounderror');
+const BadRequestError = require('../errors/badrequesterror');
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
@@ -19,13 +20,22 @@ module.exports.getAllUsers = (req, res) => {
     .catch();
 };
 
-module.exports.getUserById = (req, res) => {
+module.exports.getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      res.send({ data: user });
+      if (!user) {
+        throw new NotFoundError('Пользователь не найден');
+      }
+      res.status(200).send({ data: user });
     })
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Невевный ID'));
+        return;
+      }
+      next(err);
+    });
 };
 
 module.exports.updateUser = (req, res) => {
@@ -39,7 +49,7 @@ module.exports.updateUser = (req, res) => {
     },
   )
     .then((user) => {
-      
+
       res.send({ data: user });
     })
     .catch(() => res.status(404).send({ message: 'Произошла ошибка' }));
