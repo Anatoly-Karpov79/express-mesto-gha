@@ -39,12 +39,10 @@ module.exports.updateUser = (req, res) => {
     },
   )
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('The requested user not found');
-      }
+      
       res.send({ data: user });
     })
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(404).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.updateUserAvatar = (req, res) => {
