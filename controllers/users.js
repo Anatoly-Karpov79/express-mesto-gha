@@ -28,6 +28,7 @@ module.exports.getUserById = (req, res) => {
       res.status(200).send({ data: user });
     })
     .catch(() => {
+      console.log('dfsfsef');
       res.status(400).send({ message: 'Пользователь не найден' });
     });
 };
