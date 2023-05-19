@@ -28,7 +28,6 @@ module.exports.getUserById = (req, res) => {
       res.status(200).send({ data: user });
     })
     .catch(() => {
-      console.log('dfsfsef');
       res.status(400).send({ message: 'Пользователь не найден' });
     });
 };
@@ -43,9 +42,8 @@ module.exports.updateUser = (req, res) => {
       new: true, // обработчик then получит на вход обновлённую запись
     },
   )
-    .then((user) => {
-      res.send({ data: user });
-    })
+    .then((user) => res.send({ data: user }))
+  // если данные не записались, вернём ошибку
     .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 };
 
