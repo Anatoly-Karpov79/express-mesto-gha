@@ -25,12 +25,12 @@ module.exports.getUserById = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'Неверный Id' });
+        res.status(400).send({ message: 'Неверный Id' });
       }
       res.status(200).send({ data: user });
     })
     .catch(() => {
-      res.status(404).send({ message: 'jgznm Неверный Id' });
+      res.status(404).send({ message: 'Пользователь не найден' });
     });
 };
 
@@ -47,7 +47,7 @@ module.exports.updateUser = (req, res) => {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch(() => res.status(404).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.updateUserAvatar = (req, res) => {
