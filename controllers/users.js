@@ -1,7 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 const User = require('../models/user');
-const NotFoundError = require('../errors/notfounderror');
-const BadRequestError = require('../errors/badrequesterror');
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
@@ -25,12 +23,12 @@ module.exports.getUserById = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(400).send({ message: 'Неверный Id' });
+        res.status(404).send({ message: 'Неверный Id' });
       }
       res.status(200).send({ data: user });
     })
     .catch(() => {
-      res.status(404).send({ message: 'Пользователь не найден' });
+      res.status(400).send({ message: 'Пользователь не найден' });
     });
 };
 
@@ -63,5 +61,5 @@ module.exports.updateUserAvatar = (req, res) => {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
