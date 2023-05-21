@@ -21,9 +21,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 
 app.use(routerUsers);
 app.use(routerCards);
-
-app.all('/*', function (req, res) {
-  res.status(404).send({ message: 'Неверный путь'})
+app.all('/*', (res) => {
+  res.status(404).send({ message: 'Неверный путь' });
 });
-
 app.listen(PORT);
