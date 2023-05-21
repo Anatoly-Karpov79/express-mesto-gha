@@ -40,6 +40,7 @@ module.exports.updateUser = (req, res) => {
     { name, about },
     {
       new: true, // обработчик then получит на вход обновлённую запись
+      runValidators: true,
     },
   )
     .then((user) => res.send({ data: user }))
