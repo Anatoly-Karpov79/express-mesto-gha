@@ -1,7 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 const Card = require('../models/card');
-const BadRequestError = require('../errors/badrequesterror');
-const NotFoundError = require('../errors/notfounderror');
 
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
