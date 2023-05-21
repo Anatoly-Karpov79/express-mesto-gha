@@ -22,7 +22,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 app.use(routerUsers);
 app.use(routerCards);
 app.use('/*', (req, res) => {
-  res.status(404).send('Неправильный путь');
+  res.status(404).send({ message: 'Неправильный путь' });
 });
 
 app.listen(PORT);
