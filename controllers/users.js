@@ -7,7 +7,7 @@ module.exports.createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     // если данные не записались, вернём ошибку
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.getAllUsers = (req, res) => {
@@ -24,7 +24,7 @@ module.exports.getUserById = (req, res) => {
     .then((user) => {
       if (!user) {
         res.status(404).send({ message: 'Неверный Id' });
-      }
+        return}
       res.status(200).send({ data: user });
     })
     .catch(() => {
