@@ -9,7 +9,7 @@ module.exports.createUser = (req, res) => {
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя.' });
+        res.status(400).send({ message: 'Переданы некорректные данные.' });
       } else {
         res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
@@ -52,7 +52,13 @@ module.exports.updateUser = (req, res) => {
   )
     .then((user) => res.send({ data: user }))
     // если данные не записались, вернём ошибку
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные.' });
+      } else {
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
+      }
+    });
 };
 
 module.exports.updateUserAvatar = (req, res) => {
@@ -63,10 +69,17 @@ module.exports.updateUserAvatar = (req, res) => {
     { avatar },
     {
       new: true, // обработчик then получит на вход обновлённую запись
+      runValidators: true,
     },
   )
     .then((user) => {
       res.send({ data: user });
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные.' });
+      } else {
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
+      }
+    });
 };

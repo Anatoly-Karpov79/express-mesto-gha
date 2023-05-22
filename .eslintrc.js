@@ -7,6 +7,7 @@ module.exports = {
     'plugin:react/recommended',
     'airbnb',
     'plugin:json/recommended',
+    'airbnb-base',
   ],
   overrides: [
   ],
@@ -19,5 +20,6 @@ module.exports = {
 
   ],
   rules: {
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
   },
 };

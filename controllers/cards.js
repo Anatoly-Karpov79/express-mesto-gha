@@ -21,14 +21,18 @@ module.exports.getAllCards = (req, res) => {
 
 module.exports.deleteCardById = (req, res) => {
   const { cardId } = req.params;
+
   Card.findByIdAndRemove(cardId)
     .then((card) => {
-      if (!card) { res.status(404).send({ message: 'Неверный Id' });
-        return}
+      if (!card) {
+        res.status(404).send({ message: 'Неверный Id' });
+        return;
+      }
       res.send({ message: 'Карточка удалена' });
     })
-
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch(() => {
+      res.status(400).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.likeCard = (req, res) => {
