@@ -1,6 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 const User = require('../models/user');
 
+const {
+  STATUS_OK,
+  STATUS_BAD_REQUEST,
+  STATUS_NOT_FOUND,
+  STATUS_INTERNAL_SERVER_ERROR,
+} = require('../utils/constants');
+
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
@@ -9,9 +16,9 @@ module.exports.createUser = (req, res) => {
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные.' });
+        res.status(STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
       } else {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
+        res.status(STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -29,13 +36,13 @@ module.exports.getUserById = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'Неверный Id' });
+        res.status(STATUS_NOT_FOUND).send({ message: 'Неверный Id' });
         return;
       }
-      res.status(200).send({ data: user });
+      res.status(STATUS_OK).send({ data: user });
     })
     .catch(() => {
-      res.status(400).send({ message: 'Пользователь не найден' });
+      res.status(STATUS_BAD_REQUEST).send({ message: 'Пользователь не найден' });
     });
 };
 
@@ -54,9 +61,9 @@ module.exports.updateUser = (req, res) => {
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные.' });
+        res.status(STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
       } else {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
+        res.status(STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -77,9 +84,9 @@ module.exports.updateUserAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные.' });
+        res.status(STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
       } else {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
+        res.status(STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };

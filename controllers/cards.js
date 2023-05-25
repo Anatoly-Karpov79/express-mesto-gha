@@ -1,14 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 const Card = require('../models/card');
 
+const {
+  STATUS_OK,
+  STATUS_BAD_REQUEST,
+  STATUS_NOT_FOUND,
+  } = require('../utils/constants');
+
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-    .then((cards) => res.send({ data: cards }))
+    .then((cards) => res.status(STATUS_OK).send({ data: cards }))
     // если данные не записались, вернём ошибку
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(STATUS_BAD_REQUEST).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.getAllCards = (req, res) => {
@@ -25,13 +31,13 @@ module.exports.deleteCardById = (req, res) => {
   Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Неверный Id' });
+        res.status(STATUS_NOT_FOUND).send({ message: 'Неверный Id' });
         return;
       }
       res.send({ message: 'Карточка удалена' });
     })
     .catch(() => {
-      res.status(400).send({ message: 'Произошла ошибка' });
+      res.status(STATUS_BAD_REQUEST).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -43,11 +49,11 @@ module.exports.likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Неверный Id' });
+        res.status(STATUS_BAD_REQUEST).send({ message: 'Неверный Id' });
       }
       res.send({ data: card });
     })
-    .catch(() => res.status(400).send({ message: 'Карточка не найдена' }));
+    .catch(() => res.status(STATUS_NOT_FOUND).send({ message: 'Карточка не найдена' }));
 };
 
 module.exports.dislikeCard = (req, res) => {
@@ -58,9 +64,9 @@ module.exports.dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Неверный Id' });
+        res.status(STATUS_NOT_FOUND).send({ message: 'Неверный Id' });
       }
       res.send({ data: card });
     })
-    .catch(() => res.status(400).send({ message: 'Карточка не найдена' }));
+    .catch(() => res.status(STATUS_BAD_REQUEST).send({ message: 'Карточка не найдена' }));
 };
