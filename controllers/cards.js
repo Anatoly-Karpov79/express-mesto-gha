@@ -50,6 +50,7 @@ module.exports.likeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Карточка не найдена' });
+        return;
       }
       res.send({ data: card });
     })
@@ -65,6 +66,7 @@ module.exports.dislikeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(STATUS_NOT_FOUND).send({ message: 'Неверный Id' });
+        return;
       }
       res.send({ data: card });
     })
