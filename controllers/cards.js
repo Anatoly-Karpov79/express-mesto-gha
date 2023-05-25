@@ -5,7 +5,7 @@ const {
   STATUS_OK,
   STATUS_BAD_REQUEST,
   STATUS_NOT_FOUND,
-  } = require('../utils/constants');
+} = require('../utils/constants');
 
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
