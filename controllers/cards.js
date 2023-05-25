@@ -49,11 +49,11 @@ module.exports.likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(STATUS_BAD_REQUEST).send({ message: 'Неверный Id' });
+        res.status(STATUS_NOT_FOUND).send({ message: 'Карточка не найдена' });
       }
       res.send({ data: card });
     })
-    .catch(() => res.status(STATUS_NOT_FOUND).send({ message: 'Карточка не найдена' }));
+    .catch(() => res.status(STATUS_BAD_REQUEST).send({ message: 'Неверный Id' }));
 };
 
 module.exports.dislikeCard = (req, res) => {
