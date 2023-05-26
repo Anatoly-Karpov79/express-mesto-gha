@@ -41,8 +41,12 @@ module.exports.getUserById = (req, res) => {
       }
       res.status(STATUS_OK).send({ data: user });
     })
-    .catch(() => {
-      res.status(STATUS_BAD_REQUEST).send({ message: 'Пользователь не найден' });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
+      } else {
+        res.status(STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+      }
     });
 };
 
