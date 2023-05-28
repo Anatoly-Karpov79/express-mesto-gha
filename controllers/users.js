@@ -20,9 +20,7 @@ module.exports.createUser = (req, res) => {
       {
         name, about, avatar, email, password: hash,
       },
-    ));
-
-  User.create({ name, about, avatar })
+    ))
     .then((user) => res.send({ data: user }))
     // если данные не записались, вернём ошибку
     .catch((err) => {
