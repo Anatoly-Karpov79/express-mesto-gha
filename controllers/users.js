@@ -5,12 +5,11 @@ const User = require('../models/user');
 const ExistError = require('../errors/existerror');
 const BadRequestError = require('../errors/badrequesterror');
 const NotFoundError = require('../errors/notfounderror');
-const AuthError = require('../errors/autherror');
 
 const {
   STATUS_OK,
   STATUS_BAD_REQUEST,
-  STATUS_NOT_FOUND,
+  // STATUS_NOT_FOUND,
   STATUS_INTERNAL_SERVER_ERROR,
 } = require('../utils/constants');
 

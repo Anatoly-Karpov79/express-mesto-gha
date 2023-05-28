@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
+const AuthError = require('../errors/autherror');
 
 const userSchema = new mongoose.Schema({
   name: { // у пользователя есть имя — опишем требования к имени в схеме:
@@ -36,5 +38,21 @@ const userSchema = new mongoose.Schema({
 }, {
   versionKey: false, // You should be aware of the outcome after set to false
 });
+
+userSchema.statics.findUserByCredentials = function (email, password) {
+  return this.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new AuthError('Email или пароль не верны'));
+      }
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new AuthError('Email или пароль не верны'));
+          }
+          return user;
+        });
+    });
+};
 
 module.exports = mongoose.model('user', userSchema);
