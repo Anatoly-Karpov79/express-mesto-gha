@@ -2,6 +2,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const ExistError = require('../errors/existerror');
+const BadRequestError = require('../errors/badrequesterror');
+const NotFoundError = require('../errors/notfounderror');
 
 const {
   STATUS_OK,
@@ -10,7 +13,7 @@ const {
   STATUS_INTERNAL_SERVER_ERROR,
 } = require('../utils/constants');
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -21,17 +24,22 @@ module.exports.createUser = (req, res) => {
         name, about, avatar, email, password: hash,
       },
     ))
-    .then((user) => res.send({
-      _id: user._id,
-      email: user.email,
-    }))
+    .then((user) => {
+      const userPasswordLess = user.toObject();
+      delete userPasswordLess.password;
+
+      res.status(STATUS_OK).send(userPasswordLess);
+    })
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
-      } else {
-        res.status(STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        next(new BadRequestError('Переданы некорректные данные.'));
       }
+      if (err.code === 11000) {
+        next(new ExistError(`Пользователь с Email ${email} уже зарегистрирован`));
+        return;
+      }
+      next(err);
     });
 };
 
@@ -43,22 +51,22 @@ module.exports.getAllUsers = (req, res) => {
     .catch();
 };
 
-module.exports.getUserById = (req, res) => {
+module.exports.getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(STATUS_NOT_FOUND).send({ message: 'Неверный Id' });
+        next(new NotFoundError('Неверный Id'));
         return;
       }
       res.status(STATUS_OK).send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
-      } else {
-        res.status(STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        next(new BadRequestError('Переданы некорректные данные.'));
+        return;
       }
+      next(err);
     });
 };
 
