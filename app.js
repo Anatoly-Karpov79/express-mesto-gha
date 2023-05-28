@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const routerCards = require('./routes/cards');
+
 const routerUsers = require('./routes/users');
 
 const { PORT = 3000 } = process.env;
@@ -23,8 +24,8 @@ app.use('/*', (req, res) => {
 });
 
 app.use(errors());
-// app.use((err, req, res) => {
-//  res.status(500).send({ message: 'На сервере произошла ошибка' });
-// });
+app.use((err, req, res, next) => {
+  res.status(500).send({ message: 'На сервере произошла ошибка' });
+});
 
 app.listen(PORT);
