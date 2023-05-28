@@ -36,7 +36,7 @@ module.exports.createUser = (req, res, next) => {
         throw new BadRequestError('Переданы некорректные данные.');
       }
       if (err.code === 11000) {
-        throw new ExistError(`Пользователь с Email ${email} уже зарегистрирован`);
+        next(new ExistError(`Пользователь с Email ${email} уже зарегистрирован`));
       }
       next(err);
     });
