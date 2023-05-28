@@ -9,6 +9,7 @@ const {
   updateUser,
   updateUserAvatar,
   getUserInfo,
+  login,
 } = require('../controllers/users');
 
 routerUsers.get('/users', auth, getAllUsers);
@@ -39,5 +40,12 @@ routerUsers.post('/signup', celebrate({
     avatar: Joi.string().pattern(/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-/]))?/),
   }),
 }), createUser);
+
+routerUsers.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email({ minDomainSegments: 2, tlds: { allow: false } }),
+    password: Joi.string().required().pattern(/^[a-zA-Z0-9]{3,30}$/),
+  }),
+}), login);
 
 module.exports = routerUsers;
