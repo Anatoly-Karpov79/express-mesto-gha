@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const routerCards = require('./routes/cards');
-const { login, createUser, routerUsers } = require('./routes/users');
+const routerUsers = require('./routes/users');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -16,15 +16,15 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 
 app.use(routerUsers);
 app.use(routerCards);
-app.post('/signin', login);
-app.post('/signup', createUser);
+// app.post(login);
+// app.post(createUser);
 app.use('/*', (req, res) => {
   res.status(404).send({ message: 'Неправильный путь' });
 });
 
 app.use(errors());
-app.use((err, req, res) => {
-  res.status(500).send({ message: 'На сервере произошла ошибка' });
-});
+// app.use((err, req, res) => {
+//  res.status(500).send({ message: 'На сервере произошла ошибка' });
+// });
 
 app.listen(PORT);
