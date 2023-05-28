@@ -5,6 +5,7 @@ const User = require('../models/user');
 const ExistError = require('../errors/existerror');
 const BadRequestError = require('../errors/badrequesterror');
 const NotFoundError = require('../errors/notfounderror');
+const AuthError = require('../errors/autherror');
 
 const {
   STATUS_OK,
@@ -33,7 +34,7 @@ module.exports.createUser = (req, res, next) => {
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные.');
+        throw new AuthError('Переданы некорректные данные.');
       }
       if (err.code === 11000) {
         next(new ExistError(`Пользователь с Email ${email} уже зарегистрирован`));
