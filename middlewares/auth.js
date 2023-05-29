@@ -12,19 +12,19 @@ const extractBearerToken = (header) => header.replace('Bearer ', '');
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+  if (!authorization) {
     return handleAuthError(res);
   }
 
   const token = extractBearerToken(authorization);
   let payload;
+  console.log(payload);
 
   try {
     payload = jwt.verify(token, 'super-strong-secret');
   } catch (err) {
     return handleAuthError(res);
   }
-
   req.user = payload; // записываем пейлоуд в объект запроса
 
   next(); // пропускаем запрос дальше
