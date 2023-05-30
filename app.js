@@ -5,6 +5,7 @@ const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const routerCards = require('./routes/cards');
 const routerUsers = require('./routes/users');
+const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -15,11 +16,10 @@ app.use(cookieParser());
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
 });
-
+app.use(auth);
 app.use(routerUsers);
 app.use(routerCards);
-// app.post(login);
-// app.post(createUser);
+
 app.use('/*', (req, res) => {
   res.status(404).send({ message: 'Неправильный путь' });
 });
@@ -34,7 +34,7 @@ app.use((err, req, res, next) => {
     .send({
       // проверяем статус и выставляем сообщение в зависимости от него
       message: statusCode === 500
-        ? 'На сервере произошла ошибка'
+        ? 'На сервере 2 произошла ошибка'
         : message,
     });
   next();

@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 const Card = require('../models/card');
-const ExistError = require('../errors/existerror');
 const BadRequestError = require('../errors/badrequesterror');
 const NotFoundError = require('../errors/notfounderror');
 
@@ -8,12 +7,20 @@ const {
   STATUS_OK,
 } = require('../utils/constants');
 
+module.exports.getAllCards = (req, res, next) => {
+  Card.find({})
+    .then((cards) => {
+      res.send(cards);
+    })
+    .catch(next);
+};
+
 module.exports.createCard = (req, res, next) => {
-  const { name, link } = req.body;
   const owner = req.user._id;
+  const { name, link } = req.body;
 
   Card.create({ name, link, owner })
-    .then((card) => res.status(STATUS_OK).send(card))
+    .then((cards) => res.status(STATUS_OK).send(cards))
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -21,14 +28,6 @@ module.exports.createCard = (req, res, next) => {
       }
       next(err);
     });
-};
-
-module.exports.getAllCards = (req, res, next) => {
-  Card.find({})
-    .then((cards) => {
-      res.send(cards);
-    })
-    .catch(next);
 };
 
 module.exports.deleteCardById = (req, res, next) => {
