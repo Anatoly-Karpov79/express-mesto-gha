@@ -8,9 +8,6 @@ const NotFoundError = require('../errors/notfounderror');
 
 const {
   STATUS_OK,
-  STATUS_BAD_REQUEST,
-  // STATUS_NOT_FOUND,
-  STATUS_INTERNAL_SERVER_ERROR,
 } = require('../utils/constants');
 
 module.exports.createUser = (req, res, next) => {
@@ -69,7 +66,7 @@ module.exports.getUserById = (req, res, next) => {
     });
 };
 
-module.exports.updateUser = (req, res) => {
+module.exports.updateUser = (req, res, next) => {
   const userId = req.user._id;
   const { name, about } = req.body;
   User.findByIdAndUpdate(
@@ -84,14 +81,13 @@ module.exports.updateUser = (req, res) => {
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
-      } else {
-        res.status(STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        throw new BadRequestError('Переданы некорректные данные.');
       }
+      next(err);
     });
 };
 
-module.exports.updateUserAvatar = (req, res) => {
+module.exports.updateUserAvatar = (req, res, next) => {
   const userId = req.user._id;
   const { avatar } = req.body;
   User.findByIdAndUpdate(
@@ -107,10 +103,9 @@ module.exports.updateUserAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
-      } else {
-        res.status(STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        throw new BadRequestError('Переданы некорректные данные.');
       }
+      next(err);
     });
 };
 
@@ -120,7 +115,6 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
-      console.log(token);
       res.status(STATUS_OK).cookie('authorization', token, { maxAge: 3600000 * 24 * 7, httpOnly: true }).send({ message: 'Успешная авторизация' });
     })
     .catch(next);
