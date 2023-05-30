@@ -30,10 +30,12 @@ module.exports.createUser = (req, res, next) => {
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные.');
+        next(new BadRequestError('Переданы некорректные данные.'));
+        return;
       }
       if (err.code === 11000) {
         next(new ExistError(`Пользователь с Email ${email} уже зарегистрирован`));
+        return;
       }
       next(err);
     });
@@ -81,7 +83,8 @@ module.exports.updateUser = (req, res, next) => {
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные.');
+        next(new BadRequestError('Переданы некорректные данные.'));
+        return;
       }
       next(err);
     });
@@ -103,7 +106,8 @@ module.exports.updateUserAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные.');
+        next(new BadRequestError('Переданы некорректные данные.'));
+        return;
       }
       next(err);
     });
