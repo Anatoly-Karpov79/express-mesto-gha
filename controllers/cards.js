@@ -35,14 +35,14 @@ module.exports.deleteCardById = (req, res, next) => {
   const { cardId } = req.params;
 
   Card.findByIdAndRemove(cardId)
+
     .then((card) => {
       const owner = card.owner.toString();
+      if (!card) {
+        throw new NotFoundError('Корточка не найдена.');
+      }
       if (owner !== req.user._id) {
         throw new ForbiddenError('Вы не можете удалить эту карточку.');
-      }
-      if (!card) {
-        next(new NotFoundError('Корточка не найдена.'));
-        return;
       }
       res.send({ message: 'Карточка удалена' });
     })
