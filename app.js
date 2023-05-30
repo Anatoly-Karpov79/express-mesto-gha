@@ -5,7 +5,6 @@ const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const routerCards = require('./routes/cards');
 const routerUsers = require('./routes/users');
-const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -18,7 +17,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 });
 
 app.use(routerUsers);
-app.use(auth);
 app.use(routerCards);
 
 app.use('/*', (req, res) => {
