@@ -6,9 +6,6 @@ const NotFoundError = require('../errors/notfounderror');
 
 const {
   STATUS_OK,
-  STATUS_BAD_REQUEST,
-  STATUS_NOT_FOUND,
-  STATUS_INTERNAL_SERVER_ERROR,
 } = require('../utils/constants');
 
 module.exports.createCard = (req, res, next) => {
@@ -16,7 +13,7 @@ module.exports.createCard = (req, res, next) => {
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-    .then((cards) => res.status(STATUS_OK).send({ data: cards }))
+    .then((card) => res.status(STATUS_OK).send(card))
     // если данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -26,12 +23,12 @@ module.exports.createCard = (req, res, next) => {
     });
 };
 
-module.exports.getAllCards = (req, res) => {
+module.exports.getAllCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
-      res.send({ data: cards });
+      res.send(cards);
     })
-    .catch();
+    .catch(next);
 };
 
 module.exports.deleteCardById = (req, res, next) => {
@@ -62,7 +59,7 @@ module.exports.likeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Корточка не найдена.');
       }
-      res.send({ data: card });
+      res.status(STATUS_OK).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -82,7 +79,7 @@ module.exports.dislikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Корточка не найдена.');
       }
-      res.send({ data: card });
+      res.status(STATUS_OK).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
