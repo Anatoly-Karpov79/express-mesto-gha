@@ -41,7 +41,8 @@ module.exports.deleteCardById = (req, res, next) => {
         throw new ForbiddenError('Вы не можете удалить эту карточку.');
       }
       if (!card) {
-        throw new NotFoundError('Корточка не найдена.');
+        next(new NotFoundError('Корточка не найдена.'));
+        return;
       }
       res.send({ message: 'Карточка удалена' });
     })
