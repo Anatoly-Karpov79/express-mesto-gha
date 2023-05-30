@@ -38,4 +38,3 @@ routerCards.delete('/cards/:cardId/likes', celebrate({
 }), auth, dislikeCard);
 
 module.exports = routerCards;
-
