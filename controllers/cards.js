@@ -43,11 +43,10 @@ module.exports.deleteCardById = (req, res, next) => {
       const owner = card.owner.toString();
 
       if (owner !== req.user._id) {
-        throw new ForbiddenError('Вы не можете удалить эту карточку.');
+        next(new ForbiddenError('Вы не можете удалить эту карточку.'));
+        return card.remove();
       }
-
       res.send({ message: 'Карточка удалена' });
-      return card.remove();
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
