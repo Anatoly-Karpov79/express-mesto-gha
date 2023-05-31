@@ -5,6 +5,7 @@ const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const routerCards = require('./routes/cards');
 const routerUsers = require('./routes/users');
+const NotFoundError = require('./errors/notfounderror');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -19,8 +20,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 app.use(routerUsers);
 app.use(routerCards);
 
-app.use('/*', (req, res) => {
-  res.status(404).send({ message: 'Неправильный путь' });
+app.use('/*', (req, res, next) => {
+  next(new NotFoundError('Страница не найдена.'));
 });
 
 app.use(errors());
