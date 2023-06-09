@@ -43,17 +43,21 @@ module.exports.deleteCardById = (req, res, next) => {
     .then((card) => {
       const owner = card.owner.toString();
 
-      if (owner === req.user._id) {
-        card.remove(cardId);
-      } else {
+      if (owner !== req.user._id) {
         next(new ForbiddenError('Вы не можете удалить эту карточку.')); // запрет на удаление чужой карточки
         return;
       }
-
+      Card.delete();
       res.send({ message: 'Карточка удалена' });
     })
 
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные.'));
+        return;
+      }
+      next(err);
+    });
 };
 
 module.exports.likeCard = (req, res, next) => {
