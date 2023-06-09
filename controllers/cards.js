@@ -49,7 +49,7 @@ module.exports.deleteCardById = (req, res, next) => {
       }
 
       res.send({ message: 'Карточка удалена' });
-      card.remove();
+      card.remove(cardId);
     })
 
     .catch(next);
