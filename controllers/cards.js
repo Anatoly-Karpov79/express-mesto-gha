@@ -44,7 +44,7 @@ module.exports.deleteCardById = (req, res, next) => {
       const owner = card.owner.toString();
 
       if (owner === req.user._id) {
-        card.remove();
+        card.remove(cardId);
       } else {
         next(new ForbiddenError('Вы не можете удалить эту карточку.')); // запрет на удаление чужой карточки
         return;
