@@ -41,12 +41,12 @@ module.exports.createUser = (req, res, next) => {
     });
 };
 
-module.exports.getAllUsers = (req, res) => {
+module.exports.getAllUsers = (req, res, next) => {
   User.find({})
     .then((user) => {
       res.send({ data: user });
     })
-    .catch();
+    .catch(next);
 };
 
 module.exports.getUserById = (req, res, next) => {

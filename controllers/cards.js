@@ -26,6 +26,7 @@ module.exports.createCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные.'));
+        return;
       }
       next(err);
     });
@@ -34,7 +35,7 @@ module.exports.createCard = (req, res, next) => {
 module.exports.deleteCardById = (req, res, next) => {
   const { cardId } = req.params;
 
-  Card.findByIdAndDelete(cardId)
+  Card.findById(cardId)
     .orFail(() => {
       next(new NotFoundError('Карточка не найдена.'));
     })
@@ -46,16 +47,12 @@ module.exports.deleteCardById = (req, res, next) => {
         next(new ForbiddenError('Вы не можете удалить эту карточку.')); // запрет на удаление чужой карточки
         return;
       }
+
       res.send({ message: 'Карточка удалена' });
+      card.remove();
     })
 
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные.'));
-        return;
-      }
-      next(err);
-    });
+    .catch(next);
 };
 
 module.exports.likeCard = (req, res, next) => {
