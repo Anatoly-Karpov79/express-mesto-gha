@@ -56,7 +56,7 @@ module.exports.deleteCardById = (req, res, next) => {
       res.send({ message: 'Карточка удалена' });
     })
 
-    .catch(next());
+    .catch(next);
 };
 
 module.exports.likeCard = (req, res, next) => {
