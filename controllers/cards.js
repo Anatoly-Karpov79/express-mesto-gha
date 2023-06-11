@@ -53,7 +53,6 @@ module.exports.deleteCardById = (req, res, next) => {
         next(new ForbiddenError('Вы не можете удалить эту карточку.')); // запрет на удаление чужой карточки
         return;
       }
-      res.send({ message: 'Карточка удалена' });
     })
 
     .catch(next);
