@@ -18,3 +18,5 @@
 Ссылка на репозиторий: https://github.com/Anatoly-Karpov79/express-mesto-gha 
 
 ПР14
+
+Внесли изменения, перезаливаем на сервер
